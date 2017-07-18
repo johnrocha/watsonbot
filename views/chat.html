@@ -1,0 +1,290 @@
+<html>
+
+<head>
+
+
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/0/00/IBM_Watson_Logo_2017.png" type="image/x-icon"/>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+    <script>
+        var nome;
+        var context;
+
+        $(document).ready(function () {
+
+//            PEGANDO O DIA ATUAL
+//            FIM DE PEGAR DIA ATUAL
+
+
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    if ($('#inputChat').val() !== '')
+                        $("#btnChat").click();
+                    return false;
+                }
+            });
+
+
+            $("#formChat").hide();
+            $("#idForm").hide();
+            $("#idForm2").hide();
+            $("#titulo2").hide();
+            $("#img2").hide();
+            $("#btnNome").click(function () {
+                $("#formNome").hide();
+                $("#formChat").show();
+                nome = $('#inputNome').val();
+                context = { nome: nome }
+                sendMessage('');
+                $("#titulo").hide();
+                $("#img").hide();
+                $("#titulo2").show();
+                $("#img2").show();
+            });
+            $("#btnChat").click(function () {
+                var login = $('#inputChat').val();
+                if (login === "login" ||
+                    login === "sou atleta" ||
+                    login === "quero fazer login"
+                ){
+                    setTimeout(function () {
+                        $("#idForm").show();
+                    },3200);
+                }
+                $('#logChat').append('<i style="color: sandybrown"><b>' + nome + ': </i></b>' + $('#inputChat').val()+'<br>');
+                sendMessage($('#inputChat').val());
+            });
+            function sendMessage(mensagem){
+                $.post('/chat/mensagem',
+                    {
+                        mensagem: mensagem,
+                        context: JSON.stringify(context)
+                    },
+                    function (data) {
+                        context = data.context;
+                        $('#logChat').append('<p><b style="color: mediumspringgreen"> Watson: </b>' + data.resposta+'<br>');
+                    }
+              );
+                $('#inputChat').val('');
+            }
+        });
+    </script>
+    <style>
+        input{
+            color: black; !important;
+        }
+    </style>
+</head>
+
+<body style="background-color: black; color: white;">
+    <div class="text-center">
+        <img src="https://media.giphy.com/media/l3vR16pONsV8cKkWk/giphy.gif" alt="" class="img-circle" id="img2">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/00/IBM_Watson_Logo_2017.png" alt="" class="img-rounded" id="img" style="width: 30%">
+    </div>
+    <h1 class="text-center" id="titulo">Bem vindo à Inteligência Artificial <i style="color: mediumspringgreen"> WATSON</i></h1><br>
+    <!--<h1 class="text-center" id="titulo2" style="color: darkmagenta;"><i>WATSON</i></h1>-->
+    <form id="formNome" class="text-center">
+        Seu nome é:
+        <input type="text" id="inputNome" value="Humano">
+        <button type="button" id="btnNome" class="btn btn-info">Confirmar</button>
+    </form>
+    <form id="formChat" class="text-center">
+        <p id="tituloChat">
+            <p>
+                <input type="text" id="inputChat">
+                <button type="button" id="btnChat" class="btn btn-info">Enviar</button>
+                <h2 style="color: beige">Conversa</h2>
+                <div id="logChat" class="info"></div>
+    </form>
+    <form class="form inline" role="search" name="idForm"  id="idForm" method="GET" action="#">
+        <div class="row">
+            <div class="form-group col-md-3"></div>
+            <div class="form-group col-md-3">
+                <label>Email</label>
+                <input type="email" class="form-control" name="email" placeholder="seu@email.com" id="fname">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Senha</label>
+                <input type="password" class="form-control" placeholder="Senha" name="senha" id="fpass">
+            </div><br>
+            <div class="form-group col-md-3">
+                <input type="submit" class="btn btn-primary block full-width m-b" value="Enviar">
+            </div>
+        </div>
+    </form>
+
+
+    <div id="simple-msg"></div>
+
+        <!--<div id="raw-msg"></div>-->
+
+    <!--<div class="row">-->
+        <!--<div class="col-sm-6 col-md-4">-->
+            <!--<div class="thumbnail">-->
+                <!--<div class="caption">-->
+                    <!--<h3>Treino</h3>-->
+                    <!--<div id="simple-msg"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+    <form class="form inline" role="search" name="idForm2"  id="idForm2" method="GET" action="#">
+        <label id="dis" style="color: red"></label>
+        <div class="form-group">
+            <input type="text" class="form-control" name="usuario" placeholder="Id" id="usuario"  style="visibility: hidden !important;">
+        </div><br>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Emp" name="emp" id="emp" style="visibility: hidden !important;">
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="form-group col-md-1">
+                <label>Dia</label>
+                <input type="number" class="form-control" placeholder="01" name="dia" id="diaTreino" pattern="/0[1-9]|1[0-9]|2[0-9]|3[01]/">
+            </div>
+            <div class="form-group col-md-1">
+                <label>Mês</label>
+                <input type="number" class="form-control col-md-1" placeholder="12" name="mes" id="mesTreino" pattern="/0[1-9]|1[012]/" >
+            </div>
+            <div class="form-group col-md-1">
+                <label>Ano</label>
+                <input type="number" class="form-control col-md-1" placeholder="1999" name="ano" id="anoTreino" pattern="/[0-9]{4}/">
+            </div><br>
+            <div class="form-group col-md-1">
+                <input type="submit" class="btn btn-primary block full-width m-b" id="myBtn" value="Enviar">
+            </div>
+        </div>
+    </form>
+
+    <div id="msgran"></div>
+    <div id="msgren"></div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#idForm").submit(function(e) {
+
+            var url = "http://treinoonline.locaweb.com.br/webservice/app_login.php?emp=102&key=FT3klUh75Sp@cFH93SZ";
+            var email = document.forms["idForm"]["email"].value;
+            var senha = document.forms["idForm"]["senha"].value;
+
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                secure: true,
+                data: $("#idForm").serialize(),
+                crossDomain: true,
+                success: function(data)
+                {
+                    console.log(data);
+                    console.log(url );
+                    $("#simple-msg").html('<div class="row">' +
+                        '<div class="col-md-6 col-md-offset-3">' +
+//                            '<div class="thumbnail">' +
+                                '<div class="caption"> '+
+                                    '<label style="color: darkgreen">Bem-vindo! </label>'+
+                                    '<div class="alert alert-success" role="alert"><div class="glyphicon glyphicon-ok text-center">  </div>'+
+//                                        ' '+'Status: '+data.status+'</br> Id: '+data.id+'</br> ' +
+//                                        'Emp: '+data.emp+'</br> ' +
+                                        ''+data.nome+'</br> ' +
+//                                        'Nome da Empresa: </br>' +
+//                                        '"'+data.nm_emp+
+                                    '</div>'+
+                                '</div>'+
+//                            '</div>' +
+                        '</div>');
+//                    $("#raw-msg").html('<pre><code class="prettyprint">'+JSON.stringify(data)+'</code></pre>');
+                    $("#usuario").val(data.id);
+                    $("#emp").val(data.emp);
+                    sendMessage('form');
+                    function sendMessage(mensagem){
+                        $.post('/chat/mensagem',
+                            {
+                                mensagem: mensagem,
+                                context: JSON.stringify(context)
+                            },
+                            function (data) {
+                                context = data.context;
+                                $('#logChat').append('<p><b style="color: mediumspringgreen"> Watson: </b>' + data.resposta+'<br>');
+                            }
+                        );
+                        $('#inputChat').val('');
+                    }
+                }
+            });
+            setTimeout(function () {
+                $("#idForm2").show();
+                $("#idForm").hide();
+            },2500);
+            e.preventDefault();
+        });
+
+        $("#idForm2").submit(function(e) {
+
+            var key = "FT3klUh75Sp@cFH93SZ";
+            var usuario = document.forms["idForm2"]["usuario"].value;
+            var emp = document.forms["idForm2"]["emp"].value;
+            var dia = document.forms["idForm2"]["dia"].value;
+            var mes = document.forms["idForm2"]["mes"].value;
+            var ano = document.forms["idForm2"]["ano"].value;
+            var url = "http://treinoonline.locaweb.com.br/webservice/app_treinodia.php?emp="+emp+"&key="+key+"&usuario="+usuario+"&dia="+dia+"&mes="+mes+"&ano="+ano;
+            $.ajax({
+                type: "GET",
+                url: url,
+                crossDomain: true,
+                data: $("#idForm2").serialize(),
+                success: function(data)
+                {
+                    console.log(" ---> Retorno JSON: "+JSON.stringify((data)));
+                    console.log(" ---> Url Enviada: "+url);
+                    $("#msgran").html('<pre><code>'+'Duracao: '+data.treinos[0].treino.duracao+'</br> Tipo de treino: '+data.treinos[0].treino.dstreino+'<br> Modalidade: '+data.treinos[0].treino.modalidade+'</code></pre>');
+                    $("#msgren").html('<pre><code>'+JSON.stringify(data)+'</code></pre>');
+                    console.log(" ---> Status1: "+data.treino);
+                    sendMessage('grid');
+                    function sendMessage(mensagem){
+                        $.post('/chat/mensagem',
+                            {
+                                mensagem: mensagem,
+                                context: JSON.stringify(context)
+                            },
+                            function (data) {
+                                context = data.context;
+                                $('#logChat').append('<p><b style="color: mediumspringgreen"> Watson: </b>' + data.resposta+'<br>');
+                            }
+                        );
+                        $('#inputChat').val('');
+                    }
+                },
+                error: function (data, err, XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(JSON.stringify((data))+'ERRO: '+errorThrown);
+                    var r = jQuery.parseJSON(data.responseText);
+                    alert("Mensagem: " + r);
+                }
+            });
+            setTimeout(function () {
+                 $("#idForm2").hide();
+            },2500);
+            e.preventDefault();
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>
