@@ -9,7 +9,7 @@ Simples aplicação de conversação com Inteligência Artificial: **Watson**
 
 Watson requires [Node.js](https://nodejs.org/) v4+ to run.
 
-Instale as dependeências e start server.
+Instale as dependências e start server.
 
 ```sh
 $ cd watsonbot/
